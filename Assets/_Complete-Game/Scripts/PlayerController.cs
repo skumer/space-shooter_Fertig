@@ -18,8 +18,17 @@ public class PlayerController : MonoBehaviour
 	public float fireRate;
     public double fireSlowdown;
     private double delay;
+	private double save;
+	public float powerUpDuration;
+	public float powerUpScore;
+	public static GameController GameController;
 	 
 	private double nextFire;
+
+	void Start ()
+	{
+		save = fireSlowdown;
+	}
 	
 	void Update ()
 	{
@@ -34,6 +43,10 @@ public class PlayerController : MonoBehaviour
         {
             delay -=fireSlowdown;
         }
+		if ((GameController.score % powerUpScore)==0) 
+		{
+			PowerUp();
+		}
     }
 
 	void FixedUpdate ()
@@ -52,5 +65,15 @@ public class PlayerController : MonoBehaviour
 		);
 		
 		GetComponent<Rigidbody>().rotation = Quaternion.Euler (0.0f, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);
+	}
+
+	void PowerUp()
+	{
+		while (Time.time < powerUpDuration) 
+		{
+			delay = 0;
+			fireSlowdown = 0;
+		}
+		fireSlowdown = save;
 	}
 }
